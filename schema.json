@@ -1,0 +1,72 @@
+[
+  {
+    "name": "title",
+    "type": "string",
+    "mode": "nullable"
+  },
+  {
+    "name": "score",
+    "type": "integer",
+    "mode": "nullable"
+  },
+  {
+    "name": "date",
+    "type": "timestamp",
+    "mode": "nullable"
+  },
+  {
+    "name": "difficulty",
+    "type": "string",
+    "mode": "nullable"
+  },
+  {
+    "name": "max_combo",
+    "type": "integer",
+    "mode": "nullable"
+  },
+  {
+    "name": "justice_critical",
+    "type": "integer",
+    "mode": "nullable"
+  },
+  {
+    "name": "justice",
+    "type": "integer",
+    "mode": "nullable"
+  },
+  {
+    "name": "attack",
+    "type": "integer",
+    "mode": "nullable"
+  },
+  {
+    "name": "miss",
+    "type": "integer",
+    "mode": "nullable"
+  },
+  {
+    "name": "tap",
+    "type": "float",
+    "mode": "nullable"
+  },
+  {
+    "name": "hold",
+    "type": "float",
+    "mode": "nullable"
+  },
+  {
+    "name": "slide",
+    "type": "float",
+    "mode": "nullable"
+  },
+  {
+    "name": "air",
+    "type": "float",
+    "mode": "nullable"
+  },
+  {
+    "name": "flick",
+    "type": "float",
+    "mode": "nullable"
+  }
+]
