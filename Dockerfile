@@ -42,6 +42,7 @@ COPY schema.json $HOME
 COPY ./lib $HOME/lib
 COPY unicorn.conf $HOME
 COPY config.ru $HOME
+COPY .env $HOME
 
 RUN mkdir -p $HOME/tmp/pids $HOME/log
 CMD ["bundle", "exec", "unicorn", "-c", "unicorn.conf"]

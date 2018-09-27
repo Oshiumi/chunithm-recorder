@@ -1,10 +1,12 @@
 require 'selenium-webdriver'
+require 'dotenv'
 require 'json'
 require 'google/cloud/bigquery'
 require 'time'
 
 class ChunithmRecorder
   def initialize
+    Dotenv.load
     @options = Selenium::WebDriver::Chrome::Options.new
     @options.add_argument('--headless')
     @options.add_argument('--no-sandbox')
