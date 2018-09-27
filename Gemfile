@@ -7,4 +7,7 @@ gem 'chromedriver-helper'
 gem 'dotenv'
 gem 'google-cloud-bigquery'
 gem 'selenium-webdriver'
-
+gem 'sinatra'
+gem 'sinatra-contrib'
+gem 'unicorn'
+gem 'rake'
