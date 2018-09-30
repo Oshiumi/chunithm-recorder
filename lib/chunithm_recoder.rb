@@ -42,6 +42,7 @@ class ChunithmRecorder
         date_element = @driver.find_element(:xpath, '//div[contains(@class, "box_inner01")]')
         wait.until { date_element.enabled? }
         puts date = date_element.text
+        return records if Time.parse(date) < day
         unless date.match?(/#{day.strftime("%Y-%m-%d")}/)
           @driver.navigate.back
           next
