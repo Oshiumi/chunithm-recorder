@@ -34,14 +34,14 @@ RUN apt-get update && apt-get install -y unzip wget && \
 
 RUN apt-get install -y build-essential patch ruby-dev zlib1g-dev liblzma-dev
 
-COPY Gemfile $HOME
-COPY Gemfile.lock $HOME
+COPY ./app/Gemfile $HOME
+COPY ./app/Gemfile.lock $HOME
 RUN bundle install
 
-COPY schema.json $HOME
-COPY ./lib $HOME/lib
-COPY unicorn.conf $HOME
-COPY config.ru $HOME
+COPY ./app/config $HOME/config
+COPY ./app/lib $HOME/lib
+COPY ./app/unicorn.conf $HOME
+COPY ./app/config.ru $HOME
 
 RUN mkdir -p $HOME/tmp/pids $HOME/log
 CMD ["bundle", "exec", "unicorn", "-c", "unicorn.conf"]
