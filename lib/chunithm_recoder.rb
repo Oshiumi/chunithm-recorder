@@ -6,6 +6,7 @@ require 'time'
 
 class ChunithmRecorder
   def initialize
+    ENV['TZ'] = 'Asia/Tokyo'
     Dotenv.load
     @options = Selenium::WebDriver::Chrome::Options.new
     @options.add_argument('--headless')
