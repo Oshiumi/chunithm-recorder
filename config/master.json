@@ -1,0 +1,22 @@
+[
+  {
+    "name": "level",
+    "type": "float",
+    "mode": "nullable"
+  },
+  {
+    "name": "title",
+    "type": "string",
+    "mode": "nullable"
+  },
+  {
+    "name": "difficulty",
+    "type": "string",
+    "mode": "nullable"
+  },
+  {
+    "name": "rate_value",
+    "type": "float",
+    "mode": "nullable"
+  }
+]

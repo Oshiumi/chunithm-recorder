@@ -14,7 +14,7 @@ class ChunithmRecorder
 
   def load(day = Time.now-60*60*24)
     go_to_history
-    load_to_bq(fetch_chunithm_record(day))
+    load_to_bq(fetch_chunithm_record(day), 'score')
   end
 
   def go_to_history
@@ -87,7 +87,7 @@ class ChunithmRecorder
     records
   end
 
-  def load_to_bq(records)
+  def load_to_bq(records, table_id)
     File.open('tmp.json', 'w') do |f|
       records.each do |r|
         f.puts r.to_json
@@ -97,9 +97,9 @@ class ChunithmRecorder
     begin
       bq = Google::Cloud::Bigquery.new(project: ENV['CHUNITHM_GCP_PROJECT'])
       dataset = bq.dataset('chunithm') || bq.create_dataset('chunithm')
-      table = dataset.table('score') || dataset.create_table('score') do |t|
+      table = dataset.table(table_id) || dataset.create_table(table_id) do |t|
         t.schema do |s|
-          s.load File.open('schema.json')
+          s.load File.open("config//#{table_id}.json")
         end
       end
 
@@ -107,6 +107,21 @@ class ChunithmRecorder
     rescue => e
       retry
     end
+  end
+
+  def get_master_data
+    difficulty = { 'MAS' => 'master', 'EXP' => 'expert'}
+
+    driver = Selenium::WebDriver.for :chrome, options: @options
+    driver.navigate.to 'https://chuniviewer.net/ratevaluelist'
+    table = driver.find_element(:id, 'rate-list-table').find_element(:tag_name, 'tbody')
+    records = table.find_elements(:tag_name, 'tr').map do |tr|
+      e = tr.find_elements(:tag_name, 'td').map(&:text)
+      e[2] = difficulty[e[2]]
+      e.last ? ['level', 'title', 'difficulty', 'rate_value'].zip(e).to_h : nil
+    end
+    p records
+    load_to_bq(records.reject(&:nil?), 'master')
   end
 end
 

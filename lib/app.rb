@@ -27,4 +27,9 @@ class ChunithmRecorderApi < Sinatra::Base
     cr = ChunithmRecorder.new
     cr.load(Time.parse(params[:date]))
   end
+
+  get '/master' do
+    cr = ChunithmRecorder.new
+    cr.get_master_data
+  end
 end
