@@ -1,0 +1,7 @@
+steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['app', 'deploy', 'app.yaml']
+  env:
+    - 'CHUNITHM_SEGA_ID=${_CHUNITHM_SEGA_ID}'
+    - 'CHUNITHM_PASSWORD=${_CHUNITHM_PASSWORD}'
+    - 'CHUNITHM_GCP_PROJECT=${_CHUNITHM_GCP_PROJECT}'
