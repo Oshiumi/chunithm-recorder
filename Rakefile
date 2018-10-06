@@ -1,11 +1,15 @@
 require 'time'
 
+task :test, 'test'
+task :test do |task, args|
+  puts args.test
+end
+
 task :record, 'date'
 task :record do |task, args|
   require './lib/chunithm_recoder.rb'
   cr = ChunithmRecorder.new
-  puts args.date
-  cr.load(Time.parse(args.date))
+  cr.load(args.date ? Time.parse(args.date) : Time.now-60*60*24)
 end
 
 task :master

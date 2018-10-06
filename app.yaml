@@ -1,7 +1,0 @@
-env: flex
-runtime: custom
-
-instance_class: F1
-service: chunithm-recoder
-automatic_scaling:
-  max_num_instances: 1
