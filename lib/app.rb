@@ -1,7 +1,7 @@
 require 'sinatra/base'
 require 'json'
 require 'time'
-require './lib/chunithm_recoder.rb'
+require './lib/chunithm_recorder.rb'
 
 class ChunithmRecorderApi < Sinatra::Base
   configure do

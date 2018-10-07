@@ -2,7 +2,7 @@ FROM ruby:2.5.1-slim-stretch
 
 VOLUME /dev/shm
 
-ENV HOME=/chunithm-recoder
+ENV HOME=/chunithm-recorder
 WORKDIR $HOME
 
 RUN apt-get update && apt-get install -y unzip wget busybox-static curl gnupg2 && \
@@ -32,6 +32,6 @@ COPY config.ru $HOME
 RUN mkdir -p $HOME/tmp/pids $HOME/log
 RUN mkdir -p /var/spool/cron/crontabs/
 ENV TZ=Asia/Tokyo
-RUN echo '* 1 * * * cd /chunithm-recoder && bundle exec rake record' > /var/spool/cron/crontabs/root
+RUN echo '* 1 * * * cd /chunithm-recorder && bundle exec rake record' > /var/spool/cron/crontabs/root
 
 CMD ["busybox", "crond", "-f"]
