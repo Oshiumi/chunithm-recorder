@@ -1,26 +1,11 @@
-FROM gcr.io/google_appengine/ruby
-ARG REQUESTED_RUBY_VERSION="2.5.1"
+FROM ruby:2.5.1-slim-stretch
 
 VOLUME /dev/shm
-
-RUN if test -n "$REQUESTED_RUBY_VERSION" -a \
-        ! -x /rbenv/versions/$REQUESTED_RUBY_VERSION/bin/ruby; then \
-      (apt-get update -y \
-        && apt-get install -y -q gcp-ruby-$REQUESTED_RUBY_VERSION) \
-      || (cd /rbenv/plugins/ruby-build \
-        && git pull \
-        && rbenv install -s $REQUESTED_RUBY_VERSION) \
-      && rbenv global $REQUESTED_RUBY_VERSION \
-      && gem install -q --no-rdoc --no-ri bundler --version $BUNDLER_VERSION \
-      && apt-get clean \
-      && rm -f /var/lib/apt/lists/*_*; \
-    fi
-ENV RBENV_VERSION=${REQUESTED_RUBY_VERSION:-$RBENV_VERSION}
 
 ENV HOME=/chunithm-recoder
 WORKDIR $HOME
 
-RUN apt-get update && apt-get install -y unzip wget && \
+RUN apt-get update && apt-get install -y unzip wget busybox-static curl gnupg2 && \
     CHROME_DRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
     wget -N http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip -P ~/ && \
     unzip ~/chromedriver_linux64.zip -d ~/ && \
@@ -38,11 +23,15 @@ COPY Gemfile $HOME
 COPY Gemfile.lock $HOME
 RUN bundle install
 
-COPY schema.json $HOME
-COPY ./lib $HOME/lib
+COPY config $HOME/config
+COPY lib $HOME/lib
+COPY Rakefile $HOME
 COPY unicorn.conf $HOME
 COPY config.ru $HOME
-COPY .env $HOME
 
 RUN mkdir -p $HOME/tmp/pids $HOME/log
-CMD ["bundle", "exec", "unicorn", "-c", "unicorn.conf"]
+RUN mkdir -p /var/spool/cron/crontabs/
+ENV TZ=Asia/Tokyo
+RUN echo '* 1 * * * cd /chunithm-recoder && bundle exec rake record' > /var/spool/cron/crontabs/root
+
+CMD ["busybox", "crond", "-f"]
