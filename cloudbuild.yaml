@@ -1,4 +1,6 @@
 steps:
 - name: docker/compose:1.22.0
-  args: ['up', '-d']
+  args: ['up', '--build' ,'-d']
+- name: gcr.io/cloud-builders/docker
+  args: ['tag', 'gcr.io/toshiumi-201122/chunithm-recorder:latest']
 images: ['gcr.io/toshiumi-201122/chunithm-recorder:latest']
