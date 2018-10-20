@@ -1,0 +1,4 @@
+steps:
+- name: ‘docker/compose:1.22.0’
+  args: [‘up’, ‘-d’]
+images: ['gcr.io/toshiumi-201122/chunithm-recorder:latest']
