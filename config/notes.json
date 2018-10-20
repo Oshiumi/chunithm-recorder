@@ -1,0 +1,47 @@
+[
+  {
+    "name": "title",
+    "type": "string",
+    "mode": "nullable"
+  },
+  {
+    "name": "difficulty",
+    "type": "string",
+    "mode": "nullable"
+  },
+  {
+    "name": "genre",
+    "type": "string",
+    "mode": "nullable"
+  },
+  {
+    "name": "all",
+    "type": "integer",
+    "mode": "nullable"
+  },
+  {
+    "name": "tap",
+    "type": "integer",
+    "mode": "nullable"
+  },
+  {
+    "name": "hold",
+    "type": "integer",
+    "mode": "nullable"
+  },
+  {
+    "name": "slide",
+    "type": "integer",
+    "mode": "nullable"
+  },
+  {
+    "name": "air",
+    "type": "integer",
+    "mode": "nullable"
+  },
+  {
+    "name": "flick",
+    "type": "integer",
+    "mode": "nullable"
+  }
+]

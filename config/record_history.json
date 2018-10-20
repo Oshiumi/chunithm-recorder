@@ -1,0 +1,28 @@
+[
+  {
+    "name": "title",
+    "type": "string",
+    "mode": "nullable"
+  },
+  {
+    "name": "difficulty",
+    "type": "string",
+    "mode": "nullable"
+  },
+  {
+    "name": "updated_at",
+    "type": "timestamp",
+    "mode": "nullable"
+  },
+  {
+    "name": "high_score",
+    "type": "integer",
+    "mode": "nullable"
+  },
+  {
+    "name": "play_count",
+    "type": "integer",
+    "mode": "nullable"
+  }
+]
+
