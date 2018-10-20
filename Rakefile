@@ -1,9 +1,8 @@
 require 'time'
 require './lib/chunithm_recorder.rb'
 
-task :test, 'test'
-task :test do |task, args|
-  puts args.test
+task :test do
+  puts 'test'
 end
 
 task :record, 'date'

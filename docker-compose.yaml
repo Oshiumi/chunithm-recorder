@@ -1,0 +1,21 @@
+version: "3"
+services:
+  chunithm:
+    build: .
+    environment:
+      - SELENIUM_URL=http://selenium-chrome:4444/wd/hub
+    networks:
+      - chunithm-recorder-network
+  chrome:
+    container_name: chrome
+    image: selenium/standalone-chrome
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - 4444:4444
+    networks:
+      chunithm-recorder-network:
+        aliases:
+          - selenium-chrome
+networks:
+  chunithm-recorder-network:
