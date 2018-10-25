@@ -36,46 +36,47 @@ class ChunithmRecorder
 
   def login_chunithm
     wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-    @driver.navigate.to 'https://chunithm-net.com/mobile/Index.html'
+    @driver.navigate.to 'https://chunithm-net.com/mobile/'
+    @driver.save_screenshot 'tmp.png'
     @driver.find_element(:name, 'segaId').send_keys(ENV['CHUNITHM_SEGA_ID'])
     @driver.find_element(:name, 'password').send_keys(ENV['CHUNITHM_PASSWORD'])
-    @driver.find_element(:xpath, '//div[contains(@class, "btn_login")]').click
+    @driver.find_element(:class_name, 'btn_login').click
 
-    wait.until {@driver.find_element(:xpath, '//div[contains(@class, "btn_select_aime")]').enabled?}
-    @driver.find_element(:xpath, '//div[contains(@class, "btn_select_aime")]').click
+    wait.until {@driver.find_element(:class_name, 'btn_select_aime').enabled? }
+    @driver.find_element(:class_name, 'btn_select_aime').click
   end
 
   def fetch_chunithm_record(day)
     login_chunithm
-    @driver.navigate.to 'https://chunithm-net.com/mobile/Playlog.html'
+    @driver.navigate.to 'https://chunithm-net.com/mobile/record/playlog'
     records = []
+    wait = Selenium::WebDriver::Wait.new(timeout: 20)
     50.times do |i|
       retry_count = 0
       begin
+        wait.until { @driver.find_element(:class_name, 'btn_see_detail').displayed? }
+        @driver.find_elements(:class_name, 'btn_see_detail')[i].click
         puts @driver.current_url
-        wait = Selenium::WebDriver::Wait.new(:timeout => 20)
-        wait.until { @driver.find_element(:xpath, %Q|//a[contains(@onclick, "JavaScript:pageMove('PlaylogDetail',#{i});")]|).displayed? }
-        @driver.find_element(:xpath, %Q|//a[contains(@onclick, "JavaScript:pageMove('PlaylogDetail',#{i});")]|).click
-        wait.until { @driver.find_element(:xpath, '//div[contains(@class, "box_inner01")]').displayed? }
-        puts date = @driver.find_element(:xpath, '//div[contains(@class, "box_inner01")]').text
+        wait.until { @driver.find_element(:class_name, 'box_inner01').displayed? }
+        puts date = @driver.find_element(:class_name, 'box_inner01').text
         return records if Time.parse(date) < day
-        unless date.match?(/#{day.strftime("%Y-%m-%d")}/)
-          @driver.navigate.to 'https://chunithm-net.com/mobile/Playlog.html'
+        if day + 24 * 60 * 60 < Time.parse(date)
+          @driver.navigate.to 'https://chunithm-net.com/mobile/record/playlog'
           next
         end
         puts title = @driver.find_element(:xpath, '//div[contains(@class, "play_musicdata_title")]').text
         score = @driver.find_element(:xpath, '//div[contains(@class, "play_musicdata_score_text")]').text[/([0-9,]+)/, 1].gsub(/,/, '_').to_i
         difficulty = @driver
-                       .find_element(:xpath, '//div[contains(@class, "play_track_result")]')
+                       .find_element(:class_name, 'play_track_result')
                        .find_element(:tag_name, 'img')
-                       .property('src')[/common\/images\/icon_text_([a-z]+)\.png$/, 1]
-        max_combo = @driver.find_element(:xpath, '//div[contains(@class, "play_musicdata_max_number")]').text
-        justice_critical = @driver.find_element(:xpath, '//div[contains(@class, "play_musicdata_judgenumber text_critical")]').text
-        justice = @driver.find_element(:xpath, '//div[contains(@class, "play_musicdata_judgenumber text_justice")]').text
-        attack = @driver.find_element(:xpath, '//div[contains(@class, "play_musicdata_judgenumber text_attack")]').text
-        miss = @driver.find_element(:xpath, '//div[contains(@class, "play_musicdata_judgenumber text_miss")]').text
+                       .property('src')[/icon_text_([a-z]+)\.png$/, 1]
+        max_combo = @driver.find_element(:xpath, '//div[contains(@class, "play_musicdata_max_number")]').text.gsub(/,/, '_').to_i
+        justice_critical = @driver.find_element(:xpath, '//div[contains(@class, "play_musicdata_judgenumber text_critical")]').text.gsub(/,/, '_').to_i
+        justice = @driver.find_element(:xpath, '//div[contains(@class, "play_musicdata_judgenumber text_justice")]').text.gsub(/,/, '_').to_i
+        attack = @driver.find_element(:xpath, '//div[contains(@class, "play_musicdata_judgenumber text_attack")]').text.gsub(/,/, '_').to_i
+        miss = @driver.find_element(:xpath, '//div[contains(@class, "play_musicdata_judgenumber text_miss")]').text.gsub(/,/, '_').to_i
         tap, hold, slide, air, flick = @driver.find_elements(:xpath, '//div[contains(@class, "play_musicdata_notesnumber")]').map(&:text).map(&:chop).map(&:to_f)
-        @driver.navigate.to 'https://chunithm-net.com/mobile/Playlog.html'
+        @driver.navigate.to 'https://chunithm-net.com/mobile/record/playlog'
         records << {
           'title' => title,
           'score' => score,
@@ -100,7 +101,7 @@ class ChunithmRecorder
         @driver.quit if @driver
         initialize_webdriver
         login_chunithm
-        @driver.navigate.to 'https://chunithm-net.com/mobile/Playlog.html'
+        @driver.navigate.to 'https://chunithm-net.com/mobile/record/playlog'
         retry
       end
     end
