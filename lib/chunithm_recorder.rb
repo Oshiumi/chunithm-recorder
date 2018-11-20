@@ -58,12 +58,13 @@ class ChunithmRecorder
         @driver.find_elements(:class_name, 'btn_see_detail')[i].click
         puts @driver.current_url
         wait.until { @driver.find_element(:class_name, 'box_inner01').displayed? }
-        puts date = @driver.find_element(:class_name, 'box_inner01').text
-        return records if Time.parse(date) < day
-        if day + 24 * 60 * 60 < Time.parse(date)
+        puts date_text = @driver.find_element(:class_name, 'box_inner01').text
+        return records if Time.parse(date_text) < day
+        if day + 24 * 60 * 60 < Time.parse(date_text)
           @driver.navigate.to 'https://chunithm-net.com/mobile/record/playlog'
           next
         end
+        date = Time.parse(date_text).to_i
         puts title = @driver.find_element(:xpath, '//div[contains(@class, "play_musicdata_title")]').text
         score = @driver.find_element(:xpath, '//div[contains(@class, "play_musicdata_score_text")]').text[/([0-9,]+)/, 1].gsub(/,/, '_').to_i
         difficulty = @driver
